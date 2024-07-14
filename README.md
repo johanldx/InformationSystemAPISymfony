@@ -1,124 +1,73 @@
-# FinalInformationSystemProject
-  API de Gestion des Factures
+# Partiel de Système d'information
 
-API de Gestion des Factures
-===========================
-
-Cette API permet de gérer les factures. Elle inclut des endpoints pour créer, lire, mettre à jour et supprimer des factures, ainsi que pour notifier un service externe lors de la création d'une facture.
-
-Endpoints
----------
-
-### 1\. Lister toutes les factures
-
-*   **URL**: `/facture/`
-*   **Méthode HTTP**: `GET`
-*   **Description**: Récupère la liste de toutes les factures.
-*   **Réponse**:
-    *   **Code 200**: Succès. Retourne un tableau JSON de toutes les factures.
-
-```json
-[
-  {
-    "id": 1,
-    "amount": 100,
-    "due_date": "2024-07-11T00:00:00+00:00",
-    "customer_email": "johan.ledoux25@gmail.com"
-  },
-]
-    
-```
-    
-    
-
-### 2\. Créer une nouvelle facture
-
-*   **URL**: `/facture/`
-*   **Méthode HTTP**: `POST`
-*   **Description**: Crée une nouvelle facture et notifie un service externe.
-*   **Corps de la requête** (JSON):
-
-```json
-{
-  "amount": 100,
-  "due_date": "2024-07-11",
-  "customer_email": "johan.ledoux25@gmail.com"
-}
-```
-                
-                
-    
-*   **Réponse**:
-    *   **Code 201**: Facture créée avec succès.
-    *   **Code 400**: Champs requis manquants.
-    *   **Code 503**: Service de notification non disponible.
-    *   **Code 500**: Erreur lors de la notification du service externe.
-
-### 3\. Récupérer une facture par ID
-
-*   **URL**: `/facture/{id}`
-*   **Méthode HTTP**: `GET`
-*   **Description**: Récupère une facture par son ID.
-*   **Paramètre URL**:
-    *   `id` : ID de la facture à récupérer.
-*   **Réponse**:
-    *   **Code 200**: Succès. Retourne la facture.
-    *   **Code 404**: Facture non trouvée.
-
-```json
-{
-  "id": 1,
-  "amount": 100,
-  "due_date": "2024-07-11",
-  "customer_email": "johan.ledoux25@gmail.com"
-}
-``` 
-    
-
-### 4\. Mettre à jour une facture
-
-*   **URL**: `/facture/{id}`
-*   **Méthode HTTP**: `PUT`
-*   **Description**: Met à jour une facture existante.
-*   **Paramètre URL**:
-    *   `id` : ID de la facture à mettre à jour.
-*   **Corps de la requête** (JSON):
-    
-```json
-{
-  "id": 1,
-  "amount": 100,
-  "due_date": "2024-07-11",
-  "customer_email": "johan.ledoux25@gmail.com"
-}
-```                
-                
-    
-*   **Réponse**:
-    *   **Code 200**: Facture mise à jour avec succès.
-    *   **Code 400**: Champs requis manquants.
-    *   **Code 404**: Facture non trouvée.
-
-### 5\. Supprimer une facture
-
-*   **URL**: `/facture/{id}`
-*   **Méthode HTTP**: `DELETE`
-*   **Description**: Supprime une facture existante.
-*   **Paramètre URL**:
-    *   `id` : ID de la facture à supprimer.
-*   **Réponse**:
-    *   **Code 204**: Facture supprimée avec succès.
-    *   **Code 404**: Facture non trouvée.
-
-Gestion des Erreurs
--------------------
-
-*   **Erreur 400**: Champs requis manquants.
-*   **Erreur 404**: Facture non trouvée.
-*   **Erreur 500**: Erreur interne lors de la notification du service externe.
-*   **Erreur 503**: Service de notification non disponible.
+API de Gestion des commandes liés pour un projet de fin de première année à l'ESGI.
 
 Dépendances
 -----------
 
-Cette API utilise le composant HTTP Client de Symfony pour faire des appels à une API externe.
+Ces APis utilisent symfony/http-client et phpmailer/phpmailer.
+
+# Documentation des API
+## Facture API
+### Routes
+- **GET /facture/** : Retourne la liste de toutes les factures.
+  - Réponse : JSON array des factures.
+- **GET /facture/{id}** : Retourne les détails d'une facture spécifique.
+  - Réponse : JSON de la facture ou un message d'erreur si la facture n'est pas trouvée.
+- **POST /facture/** : Crée une nouvelle facture.
+  - Corps de la requête : JSON avec les champs `amount`, `due_date`, et `customer_email`.
+  - Réponse : JSON de la nouvelle facture créée ou un message d'erreur en cas de champs manquants.
+- **PUT /facture/{id}** : Met à jour une facture spécifique.
+  - Corps de la requête : JSON avec les champs `amount`, `due_date`, et `customer_email`.
+  - Réponse : JSON de la facture mise à jour ou un message d'erreur si la facture n'est pas trouvée.
+- **DELETE /facture/{id}** : Supprime une facture spécifique.
+  - Réponse : Message de confirmation ou d'erreur si la facture n'est pas trouvée.
+
+### Exemple de requête POST
+```json
+{
+  "amount": 100,
+  "due_date": "2024-12-31",
+  "customer_email": "client@example.com"
+}
+```
+## Commande API
+### Routes
+- **GET /commande/** : Retourne la liste de toutes les commandes.
+  - Réponse : JSON array des commandes.
+- **GET /commande/{id}** : Retourne les détails d'une commande spécifique.
+  - Réponse : JSON de la commande ou un message d'erreur si la commande n'est pas trouvée.
+- **POST /commande/** : Crée une nouvelle commande.
+  - Corps de la requête : JSON avec les champs `product_id`, `customer_email`, `total_price` et `quantity`.
+  - Réponse : JSON de la nouvelle commande créée ou un message d'erreur en cas de champs manquants.
+- **PUT /commande/{id}** : Met à jour une commande spécifique.
+  - Corps de la requête : JSON avec les champs `product_id`, `customer_email`, `total_price` et `quantity`.
+  - Réponse : JSON de la commande mise à jour ou un message d'erreur si la commande n'est pas trouvée.
+- **DELETE /commande/{id}** : Supprime une commande spécifique.
+  - Réponse : Message de confirmation ou d'erreur si la commande n'est pas trouvée.
+### Exemple de requête POST
+```json
+{
+  "product_id": 53,
+  "customer_email": "client@example.com",
+  "quantity": 23,
+  "total_price": 1200
+}
+```
+## Notification API
+### Routes
+- **GET /notification/** : Retourne la liste de toutes les notifications.
+  - Réponse : JSON array des notifications.
+- **GET /notification/{id}** : Retourne les détails d'une notification spécifique.
+  - Réponse : JSON de la notification ou un message d'erreur si la notification n'est pas trouvée.
+- **POST /notification/** : Crée une nouvelle notification.
+  - Corps de la requête : JSON avec les champs `email_recipient`, `message`, et `sujet`.
+  - Réponse : JSON de la nouvelle notification créée ou un message d'erreur en cas de champs manquants.
+### Exemple de requête POST
+```json
+{
+  "email_recipient": "client@example.com",
+  "message": "Votre commande a été expédiée.",
+  "sujet": "Confirmation d'expédition"
+}
+```
